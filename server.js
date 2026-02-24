@@ -1,13 +1,55 @@
 const express = require("express");
 const multer = require("multer");
 const XLSX = require("xlsx");
+const path = require("path");
 
 const app = express();
 const upload = multer({ storage: multer.memoryStorage() });
 
 app.use(express.urlencoded({ extended: true }));
+app.use("/static", express.static(path.join(__dirname, "static")));
 
 let storedData = null;
+
+/* ---------------- HOME PAGE ---------------- */
+
+const HOME_HTML = `
+<!DOCTYPE html>
+<html>
+<head>
+<title>BHEL – Manpower Allocation Portal</title>
+<style>
+body { font-family:'Segoe UI'; margin:0; background:#eef2f7; }
+header { background:#0a3d62; color:white; padding:15px 40px; display:flex; align-items:center; font-size:22px; }
+header img { height:50px; margin-right:20px; }
+footer { background:#0a3d62; color:white; padding:10px; text-align:center; margin-top:40px; }
+.container { padding:40px; text-align:center; }
+button { background:#1e90ff; color:white; border:none; padding:15px 30px; margin:15px; font-size:16px; cursor:pointer; border-radius:6px; }
+.dashboard-img { max-width:300px; margin-top:20px; border-radius:8px; }
+</style>
+</head>
+<body>
+
+<header>
+<img src="/static/bhel_logo.png" alt="BHEL Logo">
+BHEL – Manpower Allocation Portal
+</header>
+
+<div class="container">
+<h2>Welcome to BHEL Manpower Allocation System</h2>
+<div>
+<button onclick="location.href='/dashboard'">Dashboard</button>
+<button onclick="location.href='/about'">About BHEL</button>
+<button onclick="location.href='/upload'">Manpower Allocation</button>
+<button onclick="location.href='/work'">Work Allocation</button>
+</div>
+<img class="dashboard-img" src="/static/bhel_dashboard.jpg" alt="BHEL Dashboard">
+</div>
+
+<footer>© 2026 BHEL | Manpower Planning System</footer>
+</body>
+</html>
+`;
 
 /* ---------------- UPLOAD PAGE ---------------- */
 
@@ -15,25 +57,23 @@ const UPLOAD_HTML = `
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Company Manpower Allocation System</title>
-    <style>
-        body { font-family: 'Segoe UI'; background:#eef2f7; margin:0; }
-        header { background:#0a3d62; color:white; padding:15px 40px; font-size:22px; }
-        footer { background:#0a3d62; color:white; padding:10px; text-align:center; margin-top:40px; }
-        .container { padding:40px; }
-        .upload-box {
-            background:white; padding:30px; width:50%;
-            margin:auto; text-align:center; border-radius:8px;
-        }
-        button {
-            background:#1e90ff; color:white; border:none;
-            padding:12px 25px; margin-top:20px;
-            cursor:pointer; font-size:16px;
-        }
-    </style>
+<title>Manpower Allocation</title>
+<style>
+body { font-family:'Segoe UI'; margin:0; background:#eef2f7; }
+header { background:#0a3d62; color:white; padding:15px 40px; display:flex; align-items:center; font-size:22px; }
+header img { height:50px; margin-right:20px; }
+footer { background:#0a3d62; color:white; padding:10px; text-align:center; margin-top:40px; }
+.container { padding:40px; }
+.upload-box { background:white; padding:30px; width:50%; margin:auto; text-align:center; border-radius:8px; }
+button { background:#1e90ff; color:white; border:none; padding:12px 25px; margin-top:20px; cursor:pointer; font-size:16px; }
+</style>
 </head>
 <body>
-<header>AADHVI TECHNOLOGIES – Manpower Allocation Portal</header>
+<header>
+<img src="/static/bhel_logo.png" alt="BHEL Logo">
+BHEL – Manpower Allocation Portal
+</header>
+
 <div class="container">
 <div class="upload-box">
 <form method="POST" enctype="multipart/form-data">
@@ -43,14 +83,14 @@ const UPLOAD_HTML = `
 </form>
 </div>
 </div>
-<footer>© 2026 AADHVI Technologies | Manpower Planning System</footer>
+<footer>© 2026 BHEL | Manpower Planning System</footer>
 </body>
 </html>
 `;
 
 /* ---------------- ALLOCATION PAGE ---------------- */
 
-function allocationPage(data) {
+function allocationPage(data){
 return `
 <!DOCTYPE html>
 <html>
@@ -58,23 +98,23 @@ return `
 <title>Manpower Allocation</title>
 <style>
 body { font-family:'Segoe UI'; background:#eef2f7; margin:0; }
-header { background:#0a3d62; color:white; padding:15px 40px; font-size:22px; }
+header { background:#0a3d62; color:white; padding:15px 40px; display:flex; align-items:center; font-size:22px; }
+header img { height:50px; margin-right:20px; }
 footer { background:#0a3d62; color:white; padding:10px; text-align:center; margin-top:40px; }
 .container { padding:40px; }
 table { border-collapse:collapse; width:100%; background:white; }
-th,td { padding:12px; border:1px solid #ccc; text-align:center; }
+th, td { padding:12px; border:1px solid #ccc; text-align:center; }
 th { background:#1e90ff; color:white; }
 input[type=number]{ width:70px; }
-button {
-    background:#1e90ff; color:white; border:none;
-    padding:12px 25px; margin-top:20px;
-    cursor:pointer; font-size:16px;
-}
+button { background:#1e90ff; color:white; border:none; padding:12px 25px; margin-top:20px; cursor:pointer; font-size:16px; }
 </style>
 </head>
 <body>
 
-<header>AADHVI TECHNOLOGIES – Manpower Allocation Portal</header>
+<header>
+<img src="/static/bhel_logo.png" alt="BHEL Logo">
+BHEL – Manpower Allocation Portal
+</header>
 
 <div class="container">
 <form method="POST" action="/generate">
@@ -89,13 +129,8 @@ ${data.map((r,i)=>`
 <td><input type="checkbox" name="check_${i}"></td>
 <td>${r.area}</td>
 <td>${r.total}</td>
-<td>
-<input type="number" name="percent_${i}" value="100" min="0" max="100"
-oninput="calc(${i})">
-</td>
-<td>
-<input type="text" name="updated_${i}" value="${r.total}" readonly>
-</td>
+<td><input type="number" name="percent_${i}" value="100" min="0" max="100" oninput="calc(${i})"></td>
+<td><input type="text" name="updated_${i}" value="${r.total}" readonly></td>
 </tr>
 `).join("")}
 
@@ -105,7 +140,7 @@ oninput="calc(${i})">
 </form>
 </div>
 
-<footer>© 2026 AADHVI Technologies | Manpower Planning System</footer>
+<footer>© 2026 BHEL | Manpower Planning System</footer>
 
 <script>
 const data = ${JSON.stringify(data)};
@@ -116,7 +151,6 @@ function calc(i){
         Math.round((total * percent) / 100);
 }
 </script>
-
 </body>
 </html>
 `;
@@ -124,11 +158,10 @@ function calc(i){
 
 /* ---------------- ROUTES ---------------- */
 
-app.get("/", (req,res)=>{
-    res.send(UPLOAD_HTML);
-});
+app.get("/", (req,res)=>{ res.send(HOME_HTML); });
+app.get("/upload", (req,res)=>{ res.send(UPLOAD_HTML); });
 
-app.post("/", upload.single("excel"), (req,res)=>{
+app.post("/upload", upload.single("excel"), (req,res)=>{
     const workbook = XLSX.read(req.file.buffer);
     const sheet = workbook.Sheets[workbook.SheetNames[0]];
     const json = XLSX.utils.sheet_to_json(sheet);
@@ -142,10 +175,7 @@ app.post("/", upload.single("excel"), (req,res)=>{
 });
 
 app.get("/allocate",(req,res)=>{
-    const data = storedData.map(r=>({
-        area: r.Area,
-        total: r.Manpower
-    }));
+    const data = storedData.map(r=>({ area: r.Area, total: r.Manpower }));
     res.send(allocationPage(data));
 });
 
@@ -158,7 +188,6 @@ app.post("/generate",(req,res)=>{
             let percent = parseInt(req.body["percent_"+i]);
             let original = storedData[i].Manpower;
             let updated = Math.round((original * percent)/100);
-
             output.push({
                 Area: storedData[i].Area,
                 Allocated_Percentage: percent,
@@ -170,7 +199,6 @@ app.post("/generate",(req,res)=>{
     const wb = XLSX.utils.book_new();
     const ws = XLSX.utils.json_to_sheet(output);
     XLSX.utils.book_append_sheet(wb, ws, "Updated");
-
     const buffer = XLSX.write(wb,{ type:"buffer", bookType:"xlsx" });
 
     res.setHeader("Content-Disposition",
@@ -178,8 +206,19 @@ app.post("/generate",(req,res)=>{
     res.send(buffer);
 });
 
+/* ---------------- EXTRA PAGES ---------------- */
+
+app.get("/dashboard",(req,res)=>{
+    res.send(`<h2>Dashboard Page</h2><p>Coming Soon...</p><a href="/">Back</a>`);
+});
+app.get("/about",(req,res)=>{
+    res.send(`<h2>About BHEL</h2><p>BHEL – Bharat Heavy Electricals Limited...</p><a href="/">Back</a>`);
+});
+app.get("/work",(req,res)=>{
+    res.send(`<h2>Work Allocation Page</h2><p>Coming Soon...</p><a href="/">Back</a>`);
+});
+
 /* ---------------- RUN ---------------- */
 
-app.listen(3000, ()=>{
-    console.log("Server running on port 3000");
-});
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, ()=>{ console.log(`Server running on port ${PORT}`); });
