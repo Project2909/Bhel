@@ -1,6 +1,7 @@
 {
   "name": "bhel-manpower-portal",
   "version": "1.0.0",
+  "description": "BHEL Manpower Allocation Portal",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
@@ -8,7 +9,11 @@
   "dependencies": {
     "express": "^4.18.2",
     "multer": "^2.0.2",
-    "xlsx": "^0.18.5",
-    "path": "^0.12.7"
-  }
+    "xlsx": "^0.22.0"
+  },
+  "engines": {
+    "node": "18.x"
+  },
+  "author": "ManPower",
+  "license": "MIT"
 }
