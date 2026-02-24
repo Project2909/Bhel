@@ -1,4 +1,4 @@
-{
+  {
   "name": "bhel-manpower-portal",
   "version": "1.0.0",
   "description": "BHEL Manpower Allocation Portal",
@@ -9,5 +9,11 @@
   "dependencies": {
     "express": "^4.18.2",
     "multer": "^2.0.2",
-    "xlsx": "^0.22.0"
-  }
+    "xlsx": "^0.18.5"
+  },
+  "engines": {
+    "node": "20.x"
+  },
+  "author": "Bhel",
+  "license": "MIT"
+}
