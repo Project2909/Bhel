@@ -6,8 +6,10 @@ const path = require("path");
 const app = express();
 const upload = multer({ storage: multer.memoryStorage() });
 
-app.use(express.urlencoded({ extended: true }));
+// Serve static files from "static" folder
 app.use("/static", express.static(path.join(__dirname, "static")));
+
+app.use(express.urlencoded({ extended: true }));
 
 let storedData = null;
 
@@ -208,15 +210,9 @@ app.post("/generate",(req,res)=>{
 
 /* ---------------- EXTRA PAGES ---------------- */
 
-app.get("/dashboard",(req,res)=>{
-    res.send(`<h2>Dashboard Page</h2><p>Coming Soon...</p><a href="/">Back</a>`);
-});
-app.get("/about",(req,res)=>{
-    res.send(`<h2>About BHEL</h2><p>BHEL – Bharat Heavy Electricals Limited...</p><a href="/">Back</a>`);
-});
-app.get("/work",(req,res)=>{
-    res.send(`<h2>Work Allocation Page</h2><p>Coming Soon...</p><a href="/">Back</a>`);
-});
+app.get("/dashboard",(req,res)=>{ res.send(`<h2>Dashboard Page</h2><p>Coming Soon...</p><a href="/">Back</a>`); });
+app.get("/about",(req,res)=>{ res.send(`<h2>About BHEL</h2><p>BHEL – Bharat Heavy Electricals Limited...</p><a href="/">Back</a>`); });
+app.get("/work",(req,res)=>{ res.send(`<h2>Work Allocation Page</h2><p>Coming Soon...</p><a href="/">Back</a>`); });
 
 /* ---------------- RUN ---------------- */
 
