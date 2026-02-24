@@ -45,7 +45,7 @@ BHEL – Manpower Allocation Portal
 <button onclick="location.href='/upload'">Manpower Allocation</button>
 <button onclick="location.href='/work'">Work Allocation</button>
 </div>
-<img class="dashboard-img" src="/static/bhel_dashboard.jpg" alt="BHEL Dashboard">
+<img class="dashboard-img" src="/static/bhel_dashboard.png" alt="BHEL Dashboard">
 </div>
 
 <footer>© 2026 BHEL | Manpower Planning System</footer>
