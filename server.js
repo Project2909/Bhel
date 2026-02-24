@@ -33,8 +33,7 @@ button { background:#1e90ff; color:white; border:none; padding:15px 30px; margin
 <body>
 
 <header>
-<img src="/static/bhel_logo.png" alt="BHEL Logo">
-BHEL – Manpower Allocation Portal
+<img src="/static/bhel_logo.png" >
 </header>
 
 <div class="container">
@@ -45,7 +44,7 @@ BHEL – Manpower Allocation Portal
 <button onclick="location.href='/upload'">Manpower Allocation</button>
 <button onclick="location.href='/work'">Work Allocation</button>
 </div>
-<img class="dashboard-img" src="/static/bhel_dashboard.png" alt="BHEL Dashboard">
+<img class="dashboard-img" src="/static/bhel_dashboard.png" >
 </div>
 
 <footer>© 2026 BHEL | Manpower Planning System</footer>
@@ -72,7 +71,7 @@ button { background:#1e90ff; color:white; border:none; padding:12px 25px; margin
 </head>
 <body>
 <header>
-<img src="/static/bhel_logo.png" alt="BHEL Logo">
+<img src="/static/bhel_logo.png" >
 BHEL – Manpower Allocation Portal
 </header>
 
@@ -114,7 +113,7 @@ button { background:#1e90ff; color:white; border:none; padding:12px 25px; margin
 <body>
 
 <header>
-<img src="/static/bhel_logo.png" alt="BHEL Logo">
+<img src="/static/bhel_logo.png" >
 BHEL – Manpower Allocation Portal
 </header>
 
